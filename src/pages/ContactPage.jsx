@@ -3,39 +3,84 @@ import { useState } from 'react'
 export default function ContactPage() {
   const [form, setForm] = useState({ name:'', email:'', message:'' })
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSubmitted(true)
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch('https://formspree.io/f/xpqbglaj', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        setError('Something went wrong. Try emailing me directly at azim.arifdzhanov@gmail.com')
+      }
+    } catch {
+      setError('Something went wrong. Try emailing me directly at azim.arifdzhanov@gmail.com')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div style={{ maxWidth: 560 }}>
-      <div className="section-header" style={{ marginBottom: 24 }}>
-        <span className="section-label">Tell me what you think</span>
-      </div>
-      <div className="feedback-card">
-        <div className="feedback-top">
-          <div>
-            <div className="feedback-title">Got feedback? Found a mistake?</div>
-            <div className="feedback-sub">I actually read every message. Takes 30 seconds.</div>
-          </div>
-          <ChatIcon />
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', minHeight:'60vh' }}>
+      <div style={{ width:'100%', maxWidth:560 }}>
+        <div className="section-header" style={{ marginBottom:24 }}>
+          <span className="section-label">Tell me what you think</span>
         </div>
-        {submitted ? (
-          <div style={{ padding:'20px 0', color:'var(--text2)', fontSize:14 }}>
-            ✓ Message sent — thanks! I'll get back to you soon.
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <input className="form-input" placeholder="Your name" value={form.name} onChange={e => setForm({...form, name:e.target.value})} required />
-              <input className="form-input" type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email:e.target.value})} required />
+        <div className="feedback-card">
+          <div className="feedback-top">
+            <div>
+              <div className="feedback-title">Got feedback? Found a mistake?</div>
+              <div className="feedback-sub">I actually read every message. Takes 30 seconds.</div>
             </div>
-            <textarea className="form-textarea" placeholder="Found a wrong answer? Have a suggestion? Just say hi — whatever's on your mind." value={form.message} onChange={e => setForm({...form, message:e.target.value})} required />
-            <button type="submit" className="btn-primary"><SendIcon /> Send message</button>
-          </form>
-        )}
+            <ChatIcon />
+          </div>
+          {submitted ? (
+            <div style={{ padding:'20px 0', color:'var(--text2)', fontSize:15 }}>
+              ✓ Message sent — thanks! I'll get back to you soon.
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="form-row">
+                <input
+                  className="form-input"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={e => setForm({...form, name:e.target.value})}
+                  required
+                />
+                <input
+                  className="form-input"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={form.email}
+                  onChange={e => setForm({...form, email:e.target.value})}
+                  required
+                />
+              </div>
+              <textarea
+                className="form-textarea"
+                placeholder="Found a wrong answer? Have a suggestion? Just say hi — whatever's on your mind."
+                value={form.message}
+                onChange={e => setForm({...form, message:e.target.value})}
+                required
+              />
+              {error && (
+                <div style={{ fontSize:13, color:'var(--red)', marginBottom:12 }}>{error}</div>
+              )}
+              <button type="submit" className="btn-primary" disabled={loading}>
+                <SendIcon /> {loading ? 'Sending...' : 'Send message'}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   )
