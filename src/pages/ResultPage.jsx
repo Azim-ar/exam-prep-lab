@@ -77,8 +77,8 @@ export default function ResultPage({ collapsed, setCollapsed }) {
         </div>
       </div>
 
-      <div style={{ flex:1, padding:'32px', overflowY:'auto' }}>
-        <div style={{ maxWidth:760, margin:'0 auto' }}>
+      <div style={{ flex:1, padding:'32px', overflowY:'auto', display:'flex', justifyContent:'center' }}>
+        <div style={{ maxWidth:760, width:'100%' }}>
 
           {/* Theme toggle */}
           <div style={{ display:'flex', justifyContent:'flex-end', marginBottom:24 }}>
