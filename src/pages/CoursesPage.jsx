@@ -4,7 +4,7 @@ export default function CoursesPage() {
   const navigate = useNavigate()
 
   const certs = [
-    { name:'PSM I', full:'Professional Scrum Master I', available:true, questions:200, time:'60 min', pass:'85%', path:'/course/psm1' },
+    { name:'PSM I', full:'Professional Scrum Master I', available:true, questions:'200 questions pool', time:'60 min', pass:'85%', path:'/course/psm1' },
     { name:'PSM II', full:'Professional Scrum Master II', available:false },
     { name:'PSPO I', full:'Professional Scrum Product Owner', available:false },
     { name:'PMP', full:'Project Management Professional', available:false },
@@ -25,7 +25,7 @@ export default function CoursesPage() {
             <div className="cert-name">{c.name}</div>
             <div className="cert-sub">{c.full}</div>
             <div className="cert-meta">
-              <span><ListIcon /> {c.questions} questions</span>
+              <span><ListIcon /> {c.questions}</span>
               <span><ClockIcon /> {c.time}</span>
               <span><TargetIcon /> {c.pass} to pass</span>
             </div>

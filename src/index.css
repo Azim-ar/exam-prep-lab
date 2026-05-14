@@ -98,7 +98,7 @@ body.light .sidebar{background:#1a1a1a;border-right-color:#111;}
   min-height:100vh;
 }
 .main-content.collapsed{margin-left:var(--sidebar-collapsed);}
-.page-inner{width:100%;max-width:900px;margin:0 auto;}
+.page-inner{width:100%;max-width:1100px;margin:0 auto;}
 
 /* Hero centering */
 .hero {
@@ -119,9 +119,9 @@ body.light .sidebar{background:#1a1a1a;border-right-color:#111;}
 
 
 .hero-eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);font-weight:500;margin-bottom:16px;}
-.hero-title{font-size:40px;font-weight:500;color:var(--text);line-height:1.12;letter-spacing:-0.02em;margin-bottom:20px;}
+.hero-title{font-size:46px;font-weight:500;color:var(--text);line-height:1.12;letter-spacing:-0.02em;margin-bottom:20px;}
 .hero-title em{color:var(--text2);font-style:normal;}
-.hero-bio{font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:28px;}
+.hero-bio{font-size:16px;color:var(--text2);line-height:1.8;margin-bottom:28px;}
 .hero-links{display:flex;gap:10px;flex-wrap:wrap;}
 .hero-link {
   display:inline-flex;align-items:center;gap:7px;font-size:13px;
@@ -156,7 +156,7 @@ body.light .photo-badge{background:rgba(255,255,255,0.95);}
 .cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:64px;}
 .cert-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:border-color var(--transition),transform var(--transition);position:relative;}
 .cert-card.available{border-color:var(--text3);cursor:pointer;}
-.cert-card.available::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--text);border-radius:var(--radius) var(--radius) 0 0;}
+.cert-card.available::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--text);border-radius:12px 12px 0 0;}
 .cert-card.available:hover{transform:translateY(-2px);}
 .cert-card.coming{opacity:0.45;}
 .cert-badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:14px;}

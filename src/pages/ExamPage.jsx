@@ -162,8 +162,8 @@ export default function ExamPage({ collapsed, setCollapsed }) {
         <div style={{ maxWidth:720, margin:'0 auto' }}>
           {/* Top bar */}
           <div className="exam-topbar">
-            <button className="back-link" style={{ marginBottom:0 }} onClick={() => navigate('/setup')}>
-              <ArrowLeft /> Setup
+            <button className="back-link" style={{ marginBottom:0 }} onClick={() => navigate(bookmarkMode ? '/course/psm1' : '/setup')}>
+              <ArrowLeft /> {bookmarkMode ? 'Back to PSM I' : 'Setup'}
             </button>
             <div style={{display:'flex',alignItems:'center',gap:10}}>
             <button className="theme-toggle" onClick={toggleTheme} style={{padding:'6px 12px',fontSize:12}}>

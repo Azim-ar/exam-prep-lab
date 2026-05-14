@@ -5,8 +5,8 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   return (
-    <div style={{ display:'flex', justifyContent:'center', alignItems:'flex-start', minHeight:'60vh' }}>
-      <div style={{ width:'100%', maxWidth:860 }}>
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', minHeight:'70vh' }}>
+      <div style={{ width:'100%', maxWidth:1100 }}>
         <section className="hero">
           <div>
             <p className="hero-eyebrow">Built by a PM, for PMs</p>
@@ -17,8 +17,13 @@ export default function HomePage() {
               If this helps even one person pass, it was worth building &lt;3
             </p>
             <div className="hero-links">
-              <a href="https://www.linkedin.com/in/azim-arifdzhanov/" target="_blank" rel="noreferrer" className="hero-link primary">
-                <LinkedInIcon /> linkedin.com/in/azim-arifdzhanov
+              <a
+                href="https://www.linkedin.com/in/azim-arifdzhanov/"
+                target="_blank"
+                rel="noreferrer"
+                className="hero-link primary"
+              >
+                <LinkedInIcon /> LinkedIn
               </a>
               <button className="hero-link" onClick={() => navigate('/contact')}>
                 <MailIcon /> Get in touch
