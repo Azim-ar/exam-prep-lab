@@ -15,6 +15,18 @@ export default function ExamPage({ collapsed, setCollapsed }) {
   const navigate = useNavigate()
   const setup = JSON.parse(sessionStorage.getItem('epl-setup') || '{}')
   const { timerEnabled = true, feedbackMode = 'instant', bookmarkMode = false } = setup
+  const [theme, setTheme] = useState(() => localStorage.getItem('epl-theme') || 'dark')
+
+  useEffect(() => {
+    document.body.className = theme === 'light' ? 'light' : ''
+  }, [theme])
+
+  function toggleTheme() {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('epl-theme', next)
+    document.body.className = next === 'light' ? 'light' : ''
+  }
 
   const [questions] = useState(() => {
     let pool = allQuestions
@@ -153,6 +165,10 @@ export default function ExamPage({ collapsed, setCollapsed }) {
             <button className="back-link" style={{ marginBottom:0 }} onClick={() => navigate('/setup')}>
               <ArrowLeft /> Setup
             </button>
+            <div style={{display:'flex',alignItems:'center',gap:10}}>
+            <button className="theme-toggle" onClick={toggleTheme} style={{padding:'6px 12px',fontSize:12}}>
+              {theme === 'dark' ? '☀ Light' : '☾ Dark'}
+            </button>
             {timerEnabled && (
               <div className={`timer-badge${timeLeft < 300 ? ' warning' : ''}`}>
                 <ClockIcon />
@@ -162,6 +178,7 @@ export default function ExamPage({ collapsed, setCollapsed }) {
                 </button>
               </div>
             )}
+            </div>
           </div>
 
           <div className="exam-progress-label">{current + 1} / {totalQ}</div>
