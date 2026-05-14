@@ -94,7 +94,7 @@ body.light .sidebar{background:#1a1a1a;border-right-color:#111;}
 .main-content {
   margin-left:var(--sidebar-w);flex:1;
   padding:40px 48px;transition:margin-left var(--transition);
-  display:flex;justify-content:center;align-items:center;
+  display:flex;justify-content:center;
   min-height:100vh;
 }
 .main-content.collapsed{margin-left:var(--sidebar-collapsed);}

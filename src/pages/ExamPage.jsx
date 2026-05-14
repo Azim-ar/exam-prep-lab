@@ -158,8 +158,8 @@ export default function ExamPage({ collapsed, setCollapsed }) {
         </div>
       </div>
 
-      <div style={{ flex:1, padding:'28px 32px', display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>
-        <div style={{ maxWidth:720, width:'100%' }}>
+      <div style={{ flex:1, padding:'28px 32px' }}>
+        <div style={{ maxWidth:720, margin:'0 auto' }}>
           {/* Top bar */}
           <div className="exam-topbar">
             <button className="back-link" style={{ marginBottom:0 }} onClick={() => navigate(bookmarkMode ? '/course/psm1' : '/setup')}>
