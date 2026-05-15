@@ -13,7 +13,7 @@ export default function CoursePage() {
   }
 
   return (
-    <div className="page">
+    <div style={{width:"100%",maxWidth:1100,margin:"0 auto"}}>
       {/* Back to courses, not home */}
       <button className="back-link" onClick={() => navigate('/courses')}>
         <ArrowLeft /> Back to courses

@@ -12,7 +12,7 @@ export default function CoursesPage() {
   ]
 
   return (
-    <div>
+    <div style={{width:'100%',maxWidth:1100,margin:'0 auto'}}>
       <div className="section-header">
         <span className="section-label">Certifications</span>
         <span className="section-hint">More coming soon</span>

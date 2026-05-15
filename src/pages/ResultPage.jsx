@@ -7,6 +7,8 @@ export default function ResultPage({ collapsed, setCollapsed }) {
   const { questions = [], feedbackMode, timeUsed } = result
   const [filter, setFilter] = useState('all')
   const [theme, setTheme] = useState(() => localStorage.getItem('epl-theme') || 'dark')
+  const [bookmarks, setBookmarks] = useState(() => JSON.parse(localStorage.getItem('epl-bookmarks-psm1') || '[]'))
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   useEffect(() => {
     document.body.className = theme === 'light' ? 'light' : ''
@@ -17,6 +19,20 @@ export default function ResultPage({ collapsed, setCollapsed }) {
     setTheme(next)
     localStorage.setItem('epl-theme', next)
     document.body.className = next === 'light' ? 'light' : ''
+  }
+
+  function toggleBookmark(qId) {
+    const updated = bookmarks.includes(qId)
+      ? bookmarks.filter(id => id !== qId)
+      : [...bookmarks, qId]
+    setBookmarks(updated)
+    localStorage.setItem('epl-bookmarks-psm1', JSON.stringify(updated))
+  }
+
+  function clearAllBookmarks() {
+    setBookmarks([])
+    localStorage.setItem('epl-bookmarks-psm1', JSON.stringify([]))
+    setShowClearConfirm(false)
   }
 
   if (!questions.length) { navigate('/'); return null }
@@ -50,7 +66,7 @@ export default function ResultPage({ collapsed, setCollapsed }) {
     navigate('/exam')
   }
 
-  const sidebarW = collapsed ? '52px' : '200px'
+  const sidebarW = collapsed ? '68px' : '220px'
 
   return (
     <div style={{ display:'flex', minHeight:'100vh', background:'var(--bg)' }}>
@@ -77,8 +93,8 @@ export default function ResultPage({ collapsed, setCollapsed }) {
         </div>
       </div>
 
-      <div style={{ flex:1, padding:'32px', overflowY:'auto' }}>
-        <div style={{ maxWidth:760, margin:'0 auto' }}>
+      <div style={{ flex:1, padding:'32px', overflowY:'auto', display:'flex', justifyContent:'center' }}>
+        <div style={{ maxWidth:760, width:'100%' }}>
 
           {/* Theme toggle */}
           <div style={{ display:'flex', justifyContent:'flex-end', marginBottom:24 }}>
@@ -129,10 +145,24 @@ export default function ResultPage({ collapsed, setCollapsed }) {
             </div>
           </div>
 
+          {/* Bookmark info bar */}
+          {bookmarks.length > 0 && (
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 14px', background:'var(--bg2)', border:'1px solid var(--border)', borderRadius:'var(--radius-sm)', marginBottom:16, fontSize:13, color:'var(--text2)' }}>
+              <span><BookmarkFilledIcon /> {bookmarks.length} question{bookmarks.length !== 1 ? 's' : ''} bookmarked</span>
+              <button
+                onClick={() => setShowClearConfirm(true)}
+                style={{ background:'none', border:'1px solid var(--red-dim)', borderRadius:6, padding:'4px 10px', fontSize:12, color:'var(--red)', cursor:'pointer' }}
+              >
+                Clear all bookmarks
+              </button>
+            </div>
+          )}
+
           {/* Review list - ALL options shown */}
           <div className="review-list">
             {filtered.map((q) => {
               const ua = q.userAnswers || []
+              const isBookmarked = bookmarks.includes(q.id)
               return (
                 <div key={q.id} className="review-item">
                   <div className="review-item-header">
@@ -140,12 +170,29 @@ export default function ResultPage({ collapsed, setCollapsed }) {
                       <span style={{ color:'var(--text3)', marginRight:8, fontSize:12 }}>Q{q.id}</span>
                       {q.text}
                     </div>
-                    <span className={`review-status ${q.status}`}>
-                      {q.status === 'correct' ? '✓ Correct' : q.status === 'incorrect' ? '✗ Incorrect' : '— Skipped'}
-                    </span>
+                    <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
+                      {/* Bookmark button */}
+                      <button
+                        onClick={() => toggleBookmark(q.id)}
+                        style={{
+                          display:'flex', alignItems:'center', gap:5,
+                          background: isBookmarked ? 'var(--bg3)' : 'none',
+                          border: `1px solid ${isBookmarked ? 'var(--border2)' : 'var(--border)'}`,
+                          borderRadius:6, padding:'4px 10px', fontSize:12,
+                          color: isBookmarked ? 'var(--text)' : 'var(--text3)',
+                          cursor:'pointer', whiteSpace:'nowrap'
+                        }}
+                      >
+                        {isBookmarked ? <BookmarkFilledIcon /> : <BookmarkIcon />}
+                        {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+                      </button>
+                      <span className={`review-status ${q.status}`}>
+                        {q.status === 'correct' ? '✓ Correct' : q.status === 'incorrect' ? '✗ Incorrect' : '— Skipped'}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Show ALL options */}
+                  {/* All options */}
                   <div className="review-answers">
                     {q.options.map((opt, oi) => {
                       const isCorrect = q.correctAnswers.includes(oi)
@@ -154,22 +201,15 @@ export default function ResultPage({ collapsed, setCollapsed }) {
                       if (isCorrect) cls = 'correct-ans'
                       else if (wasSelected && !isCorrect) cls = 'wrong-ans'
                       else cls = 'neutral'
-
                       return (
                         <div key={oi} className={`review-answer ${cls}`}>
                           <span style={{ flexShrink:0 }}>
                             {isCorrect ? <CheckSm /> : wasSelected ? <XSm /> : <DotSm />}
                           </span>
                           <span>{opt}</span>
-                          {wasSelected && !isCorrect && (
-                            <span style={{ marginLeft:'auto', fontSize:11, color:'var(--red)', flexShrink:0 }}>your answer</span>
-                          )}
-                          {isCorrect && wasSelected && (
-                            <span style={{ marginLeft:'auto', fontSize:11, color:'var(--green)', flexShrink:0 }}>your answer ✓</span>
-                          )}
-                          {isCorrect && !wasSelected && (
-                            <span style={{ marginLeft:'auto', fontSize:11, color:'var(--green)', flexShrink:0 }}>correct</span>
-                          )}
+                          {wasSelected && !isCorrect && <span style={{ marginLeft:'auto', fontSize:11, color:'var(--red)', flexShrink:0 }}>your answer</span>}
+                          {isCorrect && wasSelected && <span style={{ marginLeft:'auto', fontSize:11, color:'var(--green)', flexShrink:0 }}>your answer ✓</span>}
+                          {isCorrect && !wasSelected && <span style={{ marginLeft:'auto', fontSize:11, color:'var(--green)', flexShrink:0 }}>correct</span>}
                         </div>
                       )
                     })}
@@ -182,6 +222,41 @@ export default function ResultPage({ collapsed, setCollapsed }) {
           </div>
         </div>
       </div>
+
+      {/* Clear bookmarks confirmation popup */}
+      {showClearConfirm && (
+        <div style={{
+          position:'fixed', inset:0, background:'rgba(0,0,0,0.6)',
+          display:'flex', alignItems:'center', justifyContent:'center', zIndex:200
+        }}>
+          <div style={{
+            background:'var(--bg2)', border:'1px solid var(--border)',
+            borderRadius:12, padding:28, maxWidth:360, width:'90%',
+            textAlign:'center'
+          }}>
+            <div style={{ fontSize:16, fontWeight:500, color:'var(--text)', marginBottom:8 }}>
+              Clear all bookmarks?
+            </div>
+            <div style={{ fontSize:13, color:'var(--text2)', marginBottom:24 }}>
+              This will remove all {bookmarks.length} saved questions. This can't be undone.
+            </div>
+            <div style={{ display:'flex', gap:10, justifyContent:'center' }}>
+              <button
+                onClick={() => setShowClearConfirm(false)}
+                style={{ padding:'9px 20px', borderRadius:8, border:'1px solid var(--border)', background:'none', color:'var(--text2)', fontSize:13, cursor:'pointer' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={clearAllBookmarks}
+                style={{ padding:'9px 20px', borderRadius:8, border:'none', background:'var(--red)', color:'#fff', fontSize:13, fontWeight:500, cursor:'pointer' }}
+              >
+                Yes, clear all
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -196,5 +271,7 @@ function RetryIconSvg() { return <svg width="28" height="28" fill="none" stroke=
 function CheckSm() { return <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> }
 function XSm() { return <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> }
 function DotSm() { return <svg width="13" height="13" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.3"/></svg> }
+function BookmarkIcon() { return <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/></svg> }
+function BookmarkFilledIcon() { return <svg width="12" height="12" fill="currentColor" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" strokeLinecap="round" strokeLinejoin="round"/></svg> }
 function SunIcon() { return <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" strokeLinecap="round"/></svg> }
 function MoonIcon() { return <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" strokeLinecap="round" strokeLinejoin="round"/></svg> }
