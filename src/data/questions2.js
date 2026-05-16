@@ -505,6 +505,18 @@ const questions2 = [
     explanation: "Consistent Sprint length creates a predictable rhythm and makes velocity meaningful. And all Sprints must be one month or less — that's a firm rule in Scrum."
   },
   {
+    id: 143,
+    text: "During a Sprint, the Developers determine that they will not be able to complete all of the work they forecasted. What should they do?",
+    options: [
+      "Extend the Sprint to finish all the work.",
+      "Immediately contact the Product Owner and ask to cancel the Sprint.",
+      "Collaborate with the Product Owner to remove or adjust work from the Sprint Backlog to meet the Sprint Goal.",
+      "Work overtime to deliver everything that was forecasted."
+    ],
+    correctAnswers: [2],
+    explanation: "When the team can't finish everything, they work with the Product Owner to adjust scope — not extend the Sprint or work overtime. The Sprint Goal stays; the exact scope is flexible."
+  },
+  {
     id: 144,
     text: "A Scrum Master is essentially the same thing as a traditional PM (Project Manager).",
     options: [
@@ -562,6 +574,18 @@ const questions2 = [
     ],
     correctAnswers: [1, 3, 4],
     explanation: "The Definition of Done helps the team estimate how much they can take on, creates a shared understanding of completion, and makes the state of the Increment transparent to everyone. It doesn't describe Scrum events."
+  },
+  {
+    id: 149,
+    text: "Which of the following best describes the role of the Scrum Master?",
+    options: [
+      "A manager who directs the team's daily work and resolves conflicts.",
+      "A servant-leader who helps the Scrum Team and the organization understand and enact Scrum.",
+      "A project coordinator who tracks progress and reports to stakeholders.",
+      "A technical lead who makes architectural decisions for the Development Team."
+    ],
+    correctAnswers: [1],
+    explanation: "The Scrum Master is a servant-leader — they serve the team and the organization by helping everyone understand Scrum. They don't direct work, manage people, or make technical decisions."
   },
   {
     id: 150,
